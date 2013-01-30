@@ -32,6 +32,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <id3/tag.h>
 
 // definition d. klassen / funktionen einbinden...
 #include "classes.h"
@@ -44,7 +45,6 @@
 #include "gettag_v2.h" // id3v2
 #include "info.h"
 #include "stat.h"
-
 
 const char *argp_program_version = "tag2html 0.2 beta";
 const char *argp_program_bug_address = "<ringo19@gmx.de>";
@@ -181,9 +181,17 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	if (!arguments.silent) cout << "searching for mp3-files in  " << dir << "/" << endl;
+	if (!arguments.silent) {
+		cout << "searching for mp3-files in  " << dir << "/" << endl;
+	}
 	while ((mydirent = readdir(mydir)) != NULL) {
 		if (strstr(mydirent->d_name, ".mp3") != NULL) {
+			//ID3_Tag myTag(mydirent->d_name);
+			//ID3_Frame* myFrame = myTag.Find(ID3FID_TITLE);
+			//if (myFrame != NULL) {
+			//	cout << myFrame->GetDescription() << endl;
+			//}
+
 			// found .mp3 so lets get started
 			mysort->cur_index++;
 			mystat->mp3_count++;
