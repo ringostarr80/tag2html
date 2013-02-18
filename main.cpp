@@ -10,8 +10,6 @@
     resource             : http://tag2html.sourceforge.net
  ***************************************************************************/
 
-#include <id3/globals.h>
-
 /***************************************************************************
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,7 +30,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <id3/tag.h>
+#include <taglib/taglib.h>
+#include <taglib/tag.h>
+#include <taglib/fileref.h>
+#include <taglib/mpegfile.h>
+#include <taglib/mpegheader.h>
+#include <taglib/mpegproperties.h>
+#include <id3/globals.h>
 
 // definition d. klassen / funktionen einbinden...
 #include "classes.h"
@@ -62,6 +66,8 @@ static struct argp_option options[] = {
 	{"output", 'o', "FILE", 0, "Output to FILE instead of standard output", 0},
 	{"html", 'h', 0, 0, "Output to HTML-File", 0},
 	{"xml", 'x', 0, 0, "Output to XML-File", 0},
+	{"xsd", 1, 0, 0, "Output XSD-File", 0},
+	{"xsl", 2, 0, 0, "Output XSL-File", 0},
 	{0, 0, 0, 0, 0, 0}
 };
 
@@ -69,7 +75,7 @@ static struct argp_option options[] = {
 struct arguments {
 	char *args[0];    /* ARG1 */
 	char *output_file;
-	bool silent, verbose, version, html, xml;
+	bool silent, verbose, version, html, xml, xsd, xsl;
 };
 
 /* Parse-Funktion */
@@ -94,6 +100,14 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 			break;
 		case 'x':
 			arguments->xml = true;
+			break;
+
+		case 1:
+			arguments->xsd = true;
+			break;
+
+		case 2:
+			arguments->xsl = true;
 			break;
 
 		case ARGP_KEY_ARG:
@@ -142,6 +156,8 @@ int main(int argc, char **argv)
 	arguments.version = false;
 	arguments.html = false;
 	arguments.xml = false;
+	arguments.xsd = false;
+	arguments.xsl = false;
 	arguments.output_file = outputfile;
 	argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -164,7 +180,10 @@ int main(int argc, char **argv)
 
 	// structs
 	DIR *mydir;
-	struct dirent *mydirent;
+	struct dirent *directoryEntry;
+
+	//std::vector<TagLib::MPEG::File> mp3FileRefs;
+	std::list<TagLib::FileRef>* mp3FileRefs = new std::list<TagLib::FileRef>();
 
 	char dir[1024];
 
@@ -184,42 +203,44 @@ int main(int argc, char **argv)
 	if (!arguments.silent) {
 		cout << "searching for mp3-files in  " << dir << "/" << endl;
 	}
-	while ((mydirent = readdir(mydir)) != NULL) {
-		if (strstr(mydirent->d_name, ".mp3") != NULL) {
-			//ID3_Tag myTag(mydirent->d_name);
-			//ID3_Frame* myFrame = myTag.Find(ID3FID_TITLE);
-			//if (myFrame != NULL) {
-			//	cout << myFrame->GetDescription() << endl;
-			//}
+	while ((directoryEntry = readdir(mydir)) != NULL) {
+		if (strstr(directoryEntry->d_name, ".mp3") != NULL) {
+			TagLib::FileRef f(directoryEntry->d_name);
+			if (f.tag()->isEmpty()) {
+				continue;
+			}
+
+			mp3FileRefs->push_back(f);
 
 			// found .mp3 so lets get started
 			mysort->cur_index++;
 			mystat->mp3_count++;
 
-			get_mp3tags(mydirent->d_name, mytag);
-			//get_mp3tags_v2(mydirent->d_name, mytag);
-			mystat->tot_filesize+= get_filesize(mydirent->d_name);
+			get_mp3tags(directoryEntry->d_name, mytag);
+			//get_mp3tags_v2(directoryEntry->d_name, mytag);
+			mystat->tot_filesize+= get_filesize(directoryEntry->d_name);
 			get_albumcount(mytag->album, mystat);
 			get_artistcount(mytag->artist, mystat);
-			get_mp3header(mydirent->d_name, myheader);
+			get_mp3header(directoryEntry->d_name, myheader);
 			statheader->Length+= myheader->Length;
 			get_mp3time(myheader->Length, myheader);
-			strncpy(mytag->filename, mydirent->d_name, sizeof(mytag->filename));
+			strncpy(mytag->filename, directoryEntry->d_name, sizeof(mytag->filename));
 			strncpy(mytag->length, myheader->Length_String, sizeof(mytag->length));
 
 			mysort->make_array(mytag);
 
 			switch (mytag->layout_flag) {
-				case 0: mytag->layout_flag=1;
+				case 0:
+					mytag->layout_flag=1;
 					break;
-				case 1: mytag->layout_flag=0;
+				case 1:
+					mytag->layout_flag=0;
 					break;
 			}
 		}
 	}
 
-	if(arguments.html)
-	{
+	if (arguments.html) {
 		if (arguments.verbose) {
 			cout << "creating file " << dir << "/index.css" << endl;
 		}
@@ -247,20 +268,9 @@ int main(int argc, char **argv)
 	}
 
 	if (arguments.xml) {
-		if (arguments.verbose) {
-			cout << "creating file " << dir << "/index.xsd" << endl;
-		}
-		if (xsd_schema(xsd_file) == -1) {
-			cerr << "error: can't open xsd-file!" << endl;
-			exit(-1);
-		}
-		if (arguments.verbose) {
-			cout << "creating file " << dir << "/index.xsl" << endl;
-		}
-		if (xsl_stylesheet(xsl_file) == -1) {
-			cerr << "error: can't open xsl-file!" << endl;
-			exit(-1);
-		}
+		writeXmlFile(mp3FileRefs, arguments.xsl, arguments.xsd);
+
+		/*
 		if (arguments.verbose) {
 			cout << "creating file " << dir << "/index.xml" << endl;
 		}
@@ -268,6 +278,25 @@ int main(int argc, char **argv)
 			cerr << "error: can't open xml-file!" << endl;
 			exit(-1);
 		}
+		if (arguments.xsd) {
+			if (arguments.verbose) {
+				cout << "creating file " << dir << "/index.xsd" << endl;
+			}
+			if (xsd_schema(xsd_file) == -1) {
+				cerr << "error: can't open xsd-file!" << endl;
+				exit(-1);
+			}
+		}
+		if (arguments.xsl) {
+			if (arguments.verbose) {
+				cout << "creating file " << dir << "/index.xsl" << endl;
+			}
+			if (xsl_stylesheet(xsl_file) == -1) {
+				cerr << "error: can't open xsl-file!" << endl;
+				exit(-1);
+			}
+		}
+		*/
 	}
 
 	get_mp3time(statheader->Length, statheader);
@@ -287,12 +316,14 @@ int main(int argc, char **argv)
 			}
 		}
 
+		/*
 		if (arguments.xml) {
 			if (xml_content(&mysort->s_tag[i], myheader, xml_file) == -1) {
 				cerr << "error: can't open xml-file!" << endl;
 				exit(-1);
 			}
 		}
+		 */
 	}
 
 	if (arguments.html) {
@@ -321,6 +352,7 @@ int main(int argc, char **argv)
 		}
 	}
 
+	/*
 	if (arguments.xml) {
 		if (xml_foot(xml_file) == -1) {
 			cerr << "error: can't open xml-file!" << endl;
@@ -330,6 +362,7 @@ int main(int argc, char **argv)
 			cout << "data successfully written to " << dir << "/index.xml" << endl;
 		}
 	}
+	 */
 
 	delete mytag;
 	delete myhtml;

@@ -22,17 +22,12 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>/home/ringo/git/tag2html/CHANGES</itemPath>
-      <itemPath>/home/ringo/git/tag2html/COPYING</itemPath>
-      <itemPath>/home/ringo/git/tag2html/INSTALL</itemPath>
-      <itemPath>/home/ringo/git/tag2html/README</itemPath>
       <itemPath>README.md</itemPath>
       <itemPath>classes.cpp</itemPath>
       <itemPath>getheader.cpp</itemPath>
       <itemPath>gettag.cpp</itemPath>
       <itemPath>gettag_v2.cpp</itemPath>
       <itemPath>html.cpp</itemPath>
-      <itemPath>/home/ringo/git/tag2html/index.css</itemPath>
       <itemPath>info.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
       <itemPath>sort.cpp</itemPath>
@@ -59,10 +54,17 @@
         <compilerSet>default</compilerSet>
       </toolsSet>
       <compileType>
+        <ccTool>
+          <architecture>2</architecture>
+          <standard>8</standard>
+          <warningLevel>2</warningLevel>
+        </ccTool>
         <linkerTool>
           <commandlineTool>g++</commandlineTool>
           <linkerLibItems>
-            <linkerLibLibItem>id3</linkerLibLibItem>
+            <linkerLibLibItem>tag</linkerLibLibItem>
+            <linkerLibLibItem>tag_c</linkerLibLibItem>
+            <linkerLibLibItem>xerces-c</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

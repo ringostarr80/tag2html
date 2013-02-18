@@ -45,9 +45,9 @@ int get_mp3header(char *filename_ptr, header *mp3header)
 		return -1;
 	}
 
-	// nach Frame-Anfang f�r id3v1 suchen!
+	// nach Frame-Anfang für id3v1 suchen!
 	// Dateiposition auf 0 setzen!
-	mp3header->Dateiposition=0;
+	mp3header->Dateiposition = 0;
 	do {
 		mp3_datei.seekg(mp3header->Dateiposition, std::ios::beg);
 		// Die 4 ersten Bytes auslesen

@@ -68,7 +68,7 @@ void mp3_sort::sort_tag(void) {
 	// Bubblesort
 	for (int i = 0; i <= cur_index; i++) {
 		for (int j = cur_index; j > i; j--) {
-			if (s_tag[j-1].trackno>s_tag[j].trackno) {
+			if (s_tag[j-1].trackno > s_tag[j].trackno) {
 				strSwap(s_tag[j].artist, s_tag[j-1].artist);
 				strSwap(s_tag[j].filename, s_tag[j-1].filename);
 				strSwap(s_tag[j].title, s_tag[j-1].title);

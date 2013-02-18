@@ -22,13 +22,26 @@
 #ifndef XML_H
 #define XML_H
 
-
 #include <iostream>
 #include <fstream>
+
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMWriter.hpp>
+#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/framework/StdOutFormatTarget.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
+#include <taglib/mpegfile.h>
 
 #include "classes.h"
 #include "tag.h"
 
+XERCES_CPP_NAMESPACE_USE
+
+void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool outputXSD);
+void writeXsdFile();
+void writeXslFile();
+void writeCssFile();
 int xsd_schema(char *filename);
 int xsl_stylesheet(char *filename);
 int xml_head(char *filename);
