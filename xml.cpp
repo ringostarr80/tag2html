@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <vector>
+#include <sstream>
 #include <stdlib.h>
 
 #include <taglib/taglib.h>
@@ -29,11 +30,13 @@
 #include <taglib/mpegheader.h>
 #include <taglib/mpegproperties.h>
 
+#include "MP3Collection.hpp"
+#include "MP3Infos.hpp"
 #include "xml.h"
 
 using namespace std;
 
-void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool outputXSD)
+void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool outputXSD)
 {
 	XMLPlatformUtils::Initialize();
 	DOMImplementation* domImplementation = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
@@ -48,25 +51,25 @@ void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool out
 		doc->getDocumentElement()->setAttribute(XMLString::transcode("xsi:noNamespaceSchemalLocation"), XMLString::transcode("index.xsd"));
 	}
 
-	for (auto currentFileRef = fileRefs->begin(); currentFileRef != fileRefs->end(); currentFileRef++) {
+	ostringstream convert;
+	list<Tag2Html::MP3Infos*> sortedList = mp3Collection->getSortedList();
+	for (list<Tag2Html::MP3Infos*>::iterator mp3info = sortedList.begin(); mp3info != sortedList.end(); mp3info++) {
 		DOMElement* track = doc->createElement(XMLString::transcode("track"));
-		if (currentFileRef->tag()->track() < 1000) {
-			char trackNumber[3];
-			sprintf(trackNumber, "%u", currentFileRef->tag()->track());
-			track->setAttribute(XMLString::transcode("number"), XMLString::transcode(trackNumber));
-		}
+		convert.str("");
+		convert << (*mp3info)->track;
+		track->setAttribute(XMLString::transcode("number"), XMLString::transcode(convert.str().c_str()));
 
 		DOMElement* artist = doc->createElement(XMLString::transcode("artist"));
-		artist->setTextContent(XMLString::transcode(currentFileRef->tag()->artist().toCString(true)));
+		artist->setTextContent(XMLString::transcode((*mp3info)->artist.c_str()));
 		track->appendChild(artist);
 
 		DOMElement* title = doc->createElement(XMLString::transcode("title"));
-		title->setTextContent(XMLString::transcode(currentFileRef->tag()->title().toCString(true)));
-		if (currentFileRef->audioProperties()->length() < 3600) {
+		title->setTextContent(XMLString::transcode((*mp3info)->title.c_str()));
+		if ((*mp3info)->length < 3600) {
 			char trackLength[12];
 			struct tm* timeinfo = new tm();
 
-			int seconds = currentFileRef->audioProperties()->length();
+			int seconds = (*mp3info)->length;
 			if (seconds >= 60) {
 				int minutes = seconds / 60;
 				if (minutes >= 60) {
@@ -83,51 +86,49 @@ void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool out
 		}
 		track->appendChild(title);
 
+		convert.str("");
+		convert << (*mp3info)->year;
 		DOMElement* album = doc->createElement(XMLString::transcode("album"));
-		album->setTextContent(XMLString::transcode(currentFileRef->tag()->album().toCString(true)));
-		char year[4];
-		sprintf(year, "%u", currentFileRef->tag()->year());
-		album->setAttribute(XMLString::transcode("year"), XMLString::transcode(year));
-		album->setAttribute(XMLString::transcode("genre"), XMLString::transcode(currentFileRef->tag()->genre().toCString(true)));
+		album->setTextContent(XMLString::transcode((*mp3info)->album.c_str()));
+		album->setAttribute(XMLString::transcode("year"), XMLString::transcode(convert.str().c_str()));
+		album->setAttribute(XMLString::transcode("genre"), XMLString::transcode((*mp3info)->genre.c_str()));
 		track->appendChild(album);
 
 		DOMElement* comment = doc->createElement(XMLString::transcode("comment"));
-		comment->setTextContent(XMLString::transcode(currentFileRef->tag()->comment().toCString(true)));
+		comment->setTextContent(XMLString::transcode((*mp3info)->comment.c_str()));
 		track->appendChild(comment);
 
 		DOMElement* filename = doc->createElement(XMLString::transcode("filename"));
-		filename->setTextContent(XMLString::transcode(currentFileRef->file()->name()));
+		filename->setTextContent(XMLString::transcode((*mp3info)->filename.c_str()));
 		track->appendChild(filename);
-
-		TagLib::MPEG::File f(currentFileRef->file()->name());
 
 		DOMElement* headerInfo = doc->createElement(XMLString::transcode("header-info"));
 
-		const char* isCopyrighted = (f.audioProperties()->isCopyrighted()) ? "1" : "0";
-		const char* isOriginal = (f.audioProperties()->isOriginal()) ? "1" : "0";
-		const char* protectionEnabled = (f.audioProperties()->protectionEnabled()) ? "1" : "0";
+		const char* isCopyrighted = ((*mp3info)->isCopyrighted) ? "1" : "0";
+		const char* isOriginal = ((*mp3info)->isOriginal) ? "1" : "0";
+		const char* protectionEnabled = ((*mp3info)->protectionEnabled) ? "1" : "0";
 		headerInfo->setAttribute(XMLString::transcode("is_copyrighted"), XMLString::transcode(isCopyrighted));
 		headerInfo->setAttribute(XMLString::transcode("is_original"), XMLString::transcode(isOriginal));
 		headerInfo->setAttribute(XMLString::transcode("protection_enabled"), XMLString::transcode(protectionEnabled));
 
 		DOMElement* bitrate = doc->createElement(XMLString::transcode("bitrate"));
-		char bitrateString[3];
-		sprintf(bitrateString, "%u", currentFileRef->audioProperties()->bitrate());
-		bitrate->setAttribute(XMLString::transcode("kbits"), XMLString::transcode(bitrateString));
+		convert.str("");
+		convert << (*mp3info)->bitrate;
+		bitrate->setAttribute(XMLString::transcode("kbits"), XMLString::transcode(convert.str().c_str()));
 		headerInfo->appendChild(bitrate);
 
 		DOMElement* sampleRate = doc->createElement(XMLString::transcode("samplerate"));
-		char sampleRateString[5];
-		sprintf(sampleRateString, "%u", currentFileRef->audioProperties()->sampleRate());
-		sampleRate->setAttribute(XMLString::transcode("hz"), XMLString::transcode(sampleRateString));
+		convert.str("");
+		convert << (*mp3info)->samplerate;
+		sampleRate->setAttribute(XMLString::transcode("hz"), XMLString::transcode(convert.str().c_str()));
 		headerInfo->appendChild(sampleRate);
 
 		DOMElement* channels = doc->createElement(XMLString::transcode("channels"));
-		char channelsString[1];
-		sprintf(channelsString, "%u", f.audioProperties()->channels());
-		channels->setTextContent(XMLString::transcode(channelsString));
+		convert.str("");
+		convert << (*mp3info)->channels;
+		channels->setTextContent(XMLString::transcode(convert.str().c_str()));
 		const char* channelMode;
-		switch (f.audioProperties()->channelMode()) {
+		switch ((*mp3info)->channelMode) {
 			case TagLib::MPEG::Header::ChannelMode::DualChannel:
 				channelMode = "DualChannel";
 				break;
@@ -145,11 +146,11 @@ void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool out
 		headerInfo->appendChild(channels);
 
 		DOMElement* mpegAudioVersion = doc->createElement(XMLString::transcode("mpeg-audio-version"));
-		char layerString[1];
-		sprintf(layerString, "%u", f.audioProperties()->layer());
-		mpegAudioVersion->setAttribute(XMLString::transcode("layer"), XMLString::transcode(layerString));
+		convert.str("");
+		convert << (*mp3info)->layer;
+		mpegAudioVersion->setAttribute(XMLString::transcode("layer"), XMLString::transcode(convert.str().c_str()));
 		const char* version;
-		switch (f.audioProperties()->version()) {
+		switch ((*mp3info)->version) {
 			case TagLib::MPEG::Header::Version::Version1:
 				version = "1";
 				break;

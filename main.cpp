@@ -49,6 +49,7 @@
 #include "gettag_v2.h" // id3v2
 #include "info.h"
 #include "stat.h"
+#include "MP3Collection.hpp"
 
 const char *argp_program_version = "tag2html 0.2 beta";
 const char *argp_program_bug_address = "<ringo19@gmx.de>";
@@ -182,8 +183,7 @@ int main(int argc, char **argv)
 	DIR *mydir;
 	struct dirent *directoryEntry;
 
-	//std::vector<TagLib::MPEG::File> mp3FileRefs;
-	std::list<TagLib::FileRef>* mp3FileRefs = new std::list<TagLib::FileRef>();
+	Tag2Html::MP3Collection* mp3Collection = new Tag2Html::MP3Collection();
 
 	char dir[1024];
 
@@ -205,38 +205,12 @@ int main(int argc, char **argv)
 	}
 	while ((directoryEntry = readdir(mydir)) != NULL) {
 		if (strstr(directoryEntry->d_name, ".mp3") != NULL) {
-			TagLib::FileRef f(directoryEntry->d_name);
-			if (f.tag()->isEmpty()) {
+			TagLib::FileRef* f = new TagLib::FileRef(directoryEntry->d_name);
+			if (f->tag()->isEmpty()) {
 				continue;
 			}
 
-			mp3FileRefs->push_back(f);
-
-			// found .mp3 so lets get started
-			mysort->cur_index++;
-			mystat->mp3_count++;
-
-			get_mp3tags(directoryEntry->d_name, mytag);
-			//get_mp3tags_v2(directoryEntry->d_name, mytag);
-			mystat->tot_filesize+= get_filesize(directoryEntry->d_name);
-			get_albumcount(mytag->album, mystat);
-			get_artistcount(mytag->artist, mystat);
-			get_mp3header(directoryEntry->d_name, myheader);
-			statheader->Length+= myheader->Length;
-			get_mp3time(myheader->Length, myheader);
-			strncpy(mytag->filename, directoryEntry->d_name, sizeof(mytag->filename));
-			strncpy(mytag->length, myheader->Length_String, sizeof(mytag->length));
-
-			mysort->make_array(mytag);
-
-			switch (mytag->layout_flag) {
-				case 0:
-					mytag->layout_flag=1;
-					break;
-				case 1:
-					mytag->layout_flag=0;
-					break;
-			}
+			mp3Collection->add(f);
 		}
 	}
 
@@ -268,35 +242,7 @@ int main(int argc, char **argv)
 	}
 
 	if (arguments.xml) {
-		writeXmlFile(mp3FileRefs, arguments.xsl, arguments.xsd);
-
-		/*
-		if (arguments.verbose) {
-			cout << "creating file " << dir << "/index.xml" << endl;
-		}
-		if (xml_head(xml_file) == -1) {
-			cerr << "error: can't open xml-file!" << endl;
-			exit(-1);
-		}
-		if (arguments.xsd) {
-			if (arguments.verbose) {
-				cout << "creating file " << dir << "/index.xsd" << endl;
-			}
-			if (xsd_schema(xsd_file) == -1) {
-				cerr << "error: can't open xsd-file!" << endl;
-				exit(-1);
-			}
-		}
-		if (arguments.xsl) {
-			if (arguments.verbose) {
-				cout << "creating file " << dir << "/index.xsl" << endl;
-			}
-			if (xsl_stylesheet(xsl_file) == -1) {
-				cerr << "error: can't open xsl-file!" << endl;
-				exit(-1);
-			}
-		}
-		*/
+		writeXmlFile(mp3Collection, arguments.xsl, arguments.xsd);
 	}
 
 	get_mp3time(statheader->Length, statheader);
@@ -315,15 +261,6 @@ int main(int argc, char **argv)
 				exit(-1);
 			}
 		}
-
-		/*
-		if (arguments.xml) {
-			if (xml_content(&mysort->s_tag[i], myheader, xml_file) == -1) {
-				cerr << "error: can't open xml-file!" << endl;
-				exit(-1);
-			}
-		}
-		 */
 	}
 
 	if (arguments.html) {
@@ -351,18 +288,6 @@ int main(int argc, char **argv)
 			exit(-1);
 		}
 	}
-
-	/*
-	if (arguments.xml) {
-		if (xml_foot(xml_file) == -1) {
-			cerr << "error: can't open xml-file!" << endl;
-			exit(-1);
-		}
-		if (!arguments.silent) {
-			cout << "data successfully written to " << dir << "/index.xml" << endl;
-		}
-	}
-	 */
 
 	delete mytag;
 	delete myhtml;

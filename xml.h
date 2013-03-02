@@ -35,10 +35,11 @@
 
 #include "classes.h"
 #include "tag.h"
+#include "MP3Collection.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 
-void writeXmlFile(std::list<TagLib::FileRef>* fileRefs, bool outputXSL, bool outputXSD);
+void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool outputXSD);
 void writeXsdFile();
 void writeXslFile();
 void writeCssFile();

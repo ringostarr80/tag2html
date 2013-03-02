@@ -35,16 +35,18 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/MP3Collection.o \
+	${OBJECTDIR}/MP3Infos.o \
 	${OBJECTDIR}/classes.o \
-	${OBJECTDIR}/xml.o \
-	${OBJECTDIR}/html.o \
-	${OBJECTDIR}/stat.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/gettag_v2.o \
-	${OBJECTDIR}/info.o \
-	${OBJECTDIR}/sort.o \
+	${OBJECTDIR}/getheader.o \
 	${OBJECTDIR}/gettag.o \
-	${OBJECTDIR}/getheader.o
+	${OBJECTDIR}/gettag_v2.o \
+	${OBJECTDIR}/html.o \
+	${OBJECTDIR}/info.o \
+	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/sort.o \
+	${OBJECTDIR}/stat.o \
+	${OBJECTDIR}/xml.o
 
 
 # C Compiler Flags
@@ -69,57 +71,67 @@ LDLIBSOPTIONS=-ltag -ltag_c -lxerces-c
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	g++ -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/MP3Collection.o: MP3Collection.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Collection.o MP3Collection.cpp
+
+${OBJECTDIR}/MP3Infos.o: MP3Infos.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Infos.o MP3Infos.cpp
 
 ${OBJECTDIR}/classes.o: classes.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/classes.o classes.cpp
 
-${OBJECTDIR}/xml.o: xml.cpp 
+${OBJECTDIR}/getheader.o: getheader.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/xml.o xml.cpp
-
-${OBJECTDIR}/html.o: html.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/html.o html.cpp
-
-${OBJECTDIR}/stat.o: stat.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/stat.o stat.cpp
-
-${OBJECTDIR}/main.o: main.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/gettag_v2.o: gettag_v2.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag_v2.o gettag_v2.cpp
-
-${OBJECTDIR}/info.o: info.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/info.o info.cpp
-
-${OBJECTDIR}/sort.o: sort.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/sort.o sort.cpp
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/getheader.o getheader.cpp
 
 ${OBJECTDIR}/gettag.o: gettag.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag.o gettag.cpp
 
-${OBJECTDIR}/getheader.o: getheader.cpp 
+${OBJECTDIR}/gettag_v2.o: gettag_v2.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/getheader.o getheader.cpp
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag_v2.o gettag_v2.cpp
+
+${OBJECTDIR}/html.o: html.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/html.o html.cpp
+
+${OBJECTDIR}/info.o: info.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/info.o info.cpp
+
+${OBJECTDIR}/main.o: main.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+
+${OBJECTDIR}/sort.o: sort.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/sort.o sort.cpp
+
+${OBJECTDIR}/stat.o: stat.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/stat.o stat.cpp
+
+${OBJECTDIR}/xml.o: xml.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/xml.o xml.cpp
 
 # Subprojects
 .build-subprojects:
