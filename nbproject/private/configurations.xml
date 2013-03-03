@@ -27,10 +27,10 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml --xsd</runcommandpicklistitem>
-          <runcommandpicklistitem>"${OUTPUT_PATH}" --html</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml --xsd --xsl</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" --html</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" --xml --xsd --xsl</runcommand>
+        <runcommand>"${OUTPUT_PATH}" --html</runcommand>
         <rundir>/home/ringo/Musik/Ewig</rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

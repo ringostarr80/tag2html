@@ -27,12 +27,20 @@
 
 #include <string.h>
 
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/dom/DOMWriter.hpp>
+#include <xercesc/util/XMLString.hpp>
+#include <xercesc/util/PlatformUtils.hpp>
+#include <xercesc/framework/StdOutFormatTarget.hpp>
+#include <xercesc/framework/LocalFileFormatTarget.hpp>
+
+#include "MP3Collection.hpp"
+#include "MP3Infos.hpp"
 #include "classes.h"
 #include "tag.h"
 
-int html_css(html *output);
-int html_head(html *output, tags *mytag);
-int html_content(tags *tagger, html *output);
-int html_foot(html *output);
+XERCES_CPP_NAMESPACE_USE
+
+void writeHtmlFile(Tag2Html::MP3Collection* mp3Collection);
 
 #endif /* HTML_H */

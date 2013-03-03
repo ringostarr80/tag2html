@@ -1,216 +1,207 @@
-/***************************************************************************
-                          main.cpp  -  description
-                             -------------------
-    program              : tag2html
-    version              : 0.2.0
-    begin                : Mon Mär  3 22:34:16 CET 2003
-    copyright            : (C) 2003 by ringostarr / sfo
-    email                : ringostarr <ringo19@gmx.de>
-                           sfo <sfo@zapo.net>
-    resource             : http://tag2html.sourceforge.net
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
+#include <sstream>
 
 #include "html.h"
+#include "css.h"
 
-int html_css(html *output)
+void writeHtmlFile(Tag2Html::MP3Collection* mp3Collection)
 {
-	std::ofstream out(output->cssfilename);
+	XMLPlatformUtils::Initialize();
+	DOMImplementation* domImplementation = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
+	// <html>
+	DOMDocument* doc = domImplementation->createDocument(0, XMLString::transcode("html"), 0);
 
-	if (!out.is_open()) {
-		return -1;
-	}
+	DOMDocumentType* docType = domImplementation->createDocumentType(XMLString::transcode("html"), XMLString::transcode(""), XMLString::transcode(""));
+	doc->insertBefore(docType, doc->getDocumentElement());
 
-	out << "<!-- css-file dated: 2003-11-09 -->\n";
-	out << "body\n";
-	out << "{\n";
-	out << "\tfont-family: sans-serif;\n";
-	out << "\tfont-size:  10px;\n";
-	out << "\tbackground-color: #ABABAB;\n";
-	out << "\ttext=#303030;\n";
-	out << "}\n";
-	out << "table\n";
-	out << "{\n";
-	out << "\tbackground-color: #FFFFFF;\n";
-	out << "\tborder: \"thin solid black\";\n";
-	out << "\tfont-family: sans-serif;\n";
-	out << "\tfont-size: 10px;\n";
-	out << "}\n";
-	out << "table.nb\n";
-	out << "{\n";
-	out << "\tbackground-color: #FFFFFF;\n";
-	out << "\tborder: thin solid white;\n";
-	out << "\tfont-family: sans-serif;\n";
-	out << "\tfont-size: 10px;\n";
-	out << "}\n";
-	out << "tr.white\n";
-	out << "{\n";
-	out << "\tfont-family: sans-serif;\n";
-	out << "\tfont-size: 10px;\n";
-	out << "\tbackground-color: white;\n";
-	out << "}\n";
-	out << "tr.gray\n";
-	out << "{\n";
-	out << "\tfont-family: sans-serif;\n";
-	out << "\tfont-size: 10px;\n";
-	out << "\tbackground-color: #EEEEEE;\n";
-	out << "}\n";
-	out << "a\n";
-	out << "{\n";
-	out << "\tcolor: #444444;\n";
-	out << "}\n";
+	//	<head>
+	DOMElement* head = doc->createElement(XMLString::transcode("head"));
 
-	out.close();
-	return 0;
-}
+	//		<link rel="stylesheet" type="text/css" href="./index.css">
+	DOMElement* linkStylesheet = doc->createElement(XMLString::transcode("link"));
+	linkStylesheet->setAttribute(XMLString::transcode("rel"), XMLString::transcode("stylesheet"));
+	linkStylesheet->setAttribute(XMLString::transcode("type"), XMLString::transcode("text/css"));
+	linkStylesheet->setAttribute(XMLString::transcode("href"), XMLString::transcode("index.css"));
+	head->appendChild(linkStylesheet);
 
-int html_head(html *output, tags *mytag)
-{
-	std::ofstream out(output->htmlfilename);
+	//		<title>MP3-Leser</title>
+	DOMElement* title = doc->createElement(XMLString::transcode("title"));
+	title->setTextContent(XMLString::transcode("MP3-Leser"));
+	head->appendChild(title);
 
-	if (!out.is_open()) {
-		return -1;
-	}
+	//		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+	DOMElement* meta = doc->createElement(XMLString::transcode("meta"));
+	meta->setAttribute(XMLString::transcode("http-equiv"), XMLString::transcode("Content-Type"));
+	meta->setAttribute(XMLString::transcode("content"), XMLString::transcode("text/html"));
+	meta->setAttribute(XMLString::transcode("charset"), XMLString::transcode("utf-8"));
+	head->appendChild(meta);
 
-	if (mytag->layout_flag > 1) {
-		out << "<html>\n";
-		out << "\t<head>\n";
-		out << "\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"./index.css\">\n";
-		out << "\t\t<title>MP3-Leser</title>\n";
-		out << "\t\t<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"iso-8859-1\">\n";
-		out << "\t</head>\n";
-		out << "\t<body>\n";
-		out << "\t\t<br><br>\n";
-		out << "\t\t<center>\n";
-		out << "\t\t\t<u><b>List of Albums</b></u>\n";
-		out << "\t\t</center>\n";
-		out << "\t\t<br><br>\n";
-		out << "\t\t<table align=\"center\" width=\"500\">\n";
-		out << "\t\t\t<tr bgcolor=\"#CCCCCC\">\n";
-		out << "\t\t\t\t<td>Album</td>\n";
-		out << "\t\t\t\t<td>Artist</td>\n";
-		out << "\t\t\t</tr>\n";
-		out << "\t\t\t<tr class=\"white\">\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t</tr>\n";
-	} else {
-		out << "<html>\n";
-		out << "\t<head>\n";
-		out << "\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"./index.css\">\n";
-		out << "\t\t<title>MP3-Leser</title>\n";
-		out << "\t\t<meta http-equiv=\"Content-Type\" content=\"text/html\" charset=\"iso-8859-1\">\n";
-		out << "\t</head>\n";
-		out << "\t<body>\n";
-		out << "\t\t<br><br>\n";
-		out << "\t\t<center>\n";
-		out << "\t\t\t<u><b>Track List</b></u> ( view <a href=\"./stats.html\"><b>stats</b></a>, <a href=\"./info.html\"><b>info</b></a> )\n";
-		out << "\t\t</center>\n";
-		out << "\t\t<br><br>\n";
-		out << "\t\t<table align=\"center\" width=\"1000\">\n";
-		out << "\t\t\t<tr bgcolor=\"#CCCCCC\">\n";
-		out << "\t\t\t\t<td width=\"20\"><b>Track</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Artist</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Title</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Album</b></td>\n";
-		out << "\t\t\t\t<td width=\"50\"><b>Year</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Genre</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Comment</b></td>\n";
-		out << "\t\t\t\t<td width=\"50\"><b>Length</b></td>\n";
-		out << "\t\t\t\t<td width=\"100\"><b>Filename</b></td>\n";
-		out << "\t\t\t</tr>\n";
-		out << "\t\t\t<tr>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t\t<td></td>\n";
-		out << "\t\t\t</tr>\n";
-	}
+	//	<body>
+	DOMElement* body = doc->createElement(XMLString::transcode("body"));
 
-	out.close();
-	return 0;
-}
+	//		<h1>
+	DOMElement* h1 = doc->createElement(XMLString::transcode("h1"));
 
-int html_content(tags *tagger, html *output)
-{
-	std::ofstream out(output->htmlfilename, std::ios::app);
+	//			Track List ( view <a href="stats.html">stats</a>, <a href="info.html">info</a> )
+	h1->appendChild(doc->createTextNode(XMLString::transcode("Track List ( view ")));
+	DOMElement* statsLink = doc->createElement(XMLString::transcode("a"));
+	statsLink->setAttribute(XMLString::transcode("href"), XMLString::transcode("stats.html"));
+	statsLink->setTextContent(XMLString::transcode("stats"));
+	h1->appendChild(statsLink);
+	h1->appendChild(doc->createTextNode(XMLString::transcode(", ")));
+	DOMElement* infoLink = doc->createElement(XMLString::transcode("a"));
+	infoLink->setAttribute(XMLString::transcode("href"), XMLString::transcode("info.html"));
+	infoLink->setTextContent(XMLString::transcode("info"));
+	h1->appendChild(infoLink);
+	h1->appendChild(doc->createTextNode(XMLString::transcode(" )")));
+	body->appendChild(h1);
 
-	if (!out.is_open()) {
-		return -1;
-	}
+	//		<table align="center" width="1000">
+	DOMElement* table = doc->createElement(XMLString::transcode("table"));
+	table->setAttribute(XMLString::transcode("align"), XMLString::transcode("center"));
 
-	if (tagger->layout_flag < 2) {
-		if (tagger->layout_flag == 1) {
-			out << "\t\t\t<tr class=\"gray\">\n";
-		}
-		if (tagger->layout_flag == 0) {
-			out << "\t\t\t<tr class=\"white\">\n";
-		}
+	//			<thead>
+	DOMElement* tHead = doc->createElement(XMLString::transcode("thead"));
 
-		if (tagger->trackno < 10) {
-			out << "\t\t\t\t<td>0" << tagger->trackno << "</td>\n";
-		} else {
-			if (tagger->trackno != 0) {
-				out << "\t\t\t\t<td>" << tagger->trackno << "</td>\n";
+	//				<tr bgcolor="#CCCCCC">
+	DOMElement* tHeadRow = doc->createElement(XMLString::transcode("tr"));
+	tHeadRow->setAttribute(XMLString::transcode("bgcolor"), XMLString::transcode("#CCCCCC"));
+
+	//					<th>Track</th>
+	DOMElement* tHeadColumnTrack = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnTrack->setTextContent(XMLString::transcode("Track"));
+	tHeadRow->appendChild(tHeadColumnTrack);
+
+	//					<th>Artist</th>
+	DOMElement* tHeadColumnArtist = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnArtist->setTextContent(XMLString::transcode("Artist"));
+	tHeadRow->appendChild(tHeadColumnArtist);
+
+	//					<th>Title</th>
+	DOMElement* tHeadColumnTitle = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnTitle->setTextContent(XMLString::transcode("Title"));
+	tHeadRow->appendChild(tHeadColumnTitle);
+
+	//					<th>Album</th>
+	DOMElement* tHeadColumnAlbum = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnAlbum->setTextContent(XMLString::transcode("Album"));
+	tHeadRow->appendChild(tHeadColumnAlbum);
+
+	//					<th>Year</th>
+	DOMElement* tHeadColumnYear = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnYear->setTextContent(XMLString::transcode("Year"));
+	tHeadRow->appendChild(tHeadColumnYear);
+
+	//					<th>Genre</th>
+	DOMElement* tHeadColumnGenre = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnGenre->setTextContent(XMLString::transcode("Genre"));
+	tHeadRow->appendChild(tHeadColumnGenre);
+
+	//					<th>Comment</th>
+	DOMElement* tHeadColumnComment = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnComment->setTextContent(XMLString::transcode("Comment"));
+	tHeadRow->appendChild(tHeadColumnComment);
+
+	//					<th>Length</th>
+	DOMElement* tHeadColumnLength = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnLength->setTextContent(XMLString::transcode("Length"));
+	tHeadRow->appendChild(tHeadColumnLength);
+
+	//					<th>Filename</th>
+	DOMElement* tHeadColumnFilename = doc->createElement(XMLString::transcode("th"));
+	tHeadColumnFilename->setTextContent(XMLString::transcode("Filename"));
+	tHeadRow->appendChild(tHeadColumnFilename);
+
+	tHead->appendChild(tHeadRow);
+	table->appendChild(tHead);
+
+	//			<tbody>
+	DOMElement* tBody = doc->createElement(XMLString::transcode("tbody"));
+
+	ostringstream convert;
+	list<Tag2Html::MP3Infos*> sortedList = mp3Collection->getSortedList();
+	for (list<Tag2Html::MP3Infos*>::iterator mp3info = sortedList.begin(); mp3info != sortedList.end(); mp3info++) {
+		DOMElement* row = doc->createElement(XMLString::transcode("tr"));
+
+		convert.str("");
+		convert << (*mp3info)->track;
+		DOMElement* trackColumn = doc->createElement(XMLString::transcode("td"));
+		trackColumn->setTextContent(XMLString::transcode(convert.str().c_str()));
+		row->appendChild(trackColumn);
+
+		DOMElement* artistColumn = doc->createElement(XMLString::transcode("td"));
+		artistColumn->setTextContent(XMLString::transcode((*mp3info)->artist.c_str()));
+		row->appendChild(artistColumn);
+
+		DOMElement* titleColumn = doc->createElement(XMLString::transcode("td"));
+		titleColumn->setTextContent(XMLString::transcode((*mp3info)->title.c_str()));
+		row->appendChild(titleColumn);
+
+		DOMElement* albumColumn = doc->createElement(XMLString::transcode("td"));
+		albumColumn->setTextContent(XMLString::transcode((*mp3info)->album.c_str()));
+		row->appendChild(albumColumn);
+
+		convert.str("");
+		convert << (*mp3info)->year;
+		DOMElement* yearColumn = doc->createElement(XMLString::transcode("td"));
+		yearColumn->setTextContent(XMLString::transcode(convert.str().c_str()));
+		row->appendChild(yearColumn);
+
+		DOMElement* genreColumn = doc->createElement(XMLString::transcode("td"));
+		genreColumn->setTextContent(XMLString::transcode((*mp3info)->genre.c_str()));
+		row->appendChild(genreColumn);
+
+		DOMElement* commentColumn = doc->createElement(XMLString::transcode("td"));
+		commentColumn->setTextContent(XMLString::transcode((*mp3info)->comment.c_str()));
+		row->appendChild(commentColumn);
+
+		DOMElement* lengthColumn = doc->createElement(XMLString::transcode("td"));
+		if ((*mp3info)->length < 3600) {
+			char trackLength[12];
+			struct tm* timeinfo = new tm();
+
+			int seconds = (*mp3info)->length;
+			if (seconds >= 60) {
+				int minutes = seconds / 60;
+				if (minutes >= 60) {
+					timeinfo->tm_hour = minutes / 60;
+					timeinfo->tm_min = minutes / 60;
+				} else {
+					timeinfo->tm_min = seconds / 60;
+				}
 			}
-		}
-		out << "\t\t\t\t<td>" << tagger->artist << "</td>\n";
-		out << "\t\t\t\t<td>" << tagger->title << "</td>\n";
-		out << "\t\t\t\t<td>" << tagger->album << "</td>\n";
-		out << "\t\t\t\t<td>" << tagger->year << "</td>\n";
-		out << "\t\t\t\t<td>" << genre_string[tagger->genre] << "</td>\n";
-		if ((strstr(tagger->comment, "http://") != NULL) || (strstr(tagger->comment, "www.") != NULL)) {
-			out << "\t\t\t\t<td><a href=\"" << tagger->comment << "\">" << tagger->comment << "</a></td>\n";
-		} else {
-			out << "\t\t\t\t<td>" << tagger->comment << "</td>\n";
-		}
+			timeinfo->tm_sec = seconds % 60;
+			strftime(trackLength, 12, "%H:%M:%S", timeinfo);
 
-		out << "\t\t\t\t<td>" << tagger->length << "</td>\n";
-		out << "\t\t\t\t<td>" << tagger->filename << "</td>\n";
-		out << "\t\t\t</tr>\n";
+			lengthColumn->setTextContent(XMLString::transcode(trackLength));
+		}
+		row->appendChild(lengthColumn);
+
+		DOMElement* filenameColumn = doc->createElement(XMLString::transcode("td"));
+		filenameColumn->setTextContent(XMLString::transcode((*mp3info)->filename.c_str()));
+		row->appendChild(filenameColumn);
+
+		tBody->appendChild(row);
 	}
 
-	if (tagger->layout_flag > 1) {
-		if (tagger->layout_flag == 2) {
-			out << "\t\t\t<tr class=\"white\">\n";
-		}
-		if (tagger->layout_flag == 3) {
-			out << "\t\t\t<tr class=\"gray\">\n";
-		}
+	table->appendChild(tBody);
+	body->appendChild(table);
+	doc->getDocumentElement()->appendChild(head);
+	doc->getDocumentElement()->appendChild(body);
 
-		out << "\t\t\t\t<td><a href=\"./" << tagger->album << ".html\">" << tagger->album << "</a></td>\n";
-		out << "\t\t\t\t<td>" << tagger->artist << "</td>\n";
+	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
+	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 	}
-
-	out.close();
-	return tagger->layout_flag;
-}
-
-int html_foot(html *output)
-{
-	std::ofstream out(output->htmlfilename, std::ios::app);
-
-	if (!out.is_open()) {
-		return -1;
+	if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
+		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
 	}
+	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("index.html");
+	writer->writeNode(fileFormatTarget, *doc);
+	fileFormatTarget->flush();
+	writer->release();
 
-	out << "\t\t</table>\n";
-	out << "\t</body>\n";
-	out << "</html>\n";
+	doc->release();
+	XMLPlatformUtils::Terminate();
 
-	out.close();
-	return 0;
+	writeCssFile();
 }

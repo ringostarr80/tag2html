@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/MP3Collection.o \
 	${OBJECTDIR}/MP3Infos.o \
 	${OBJECTDIR}/classes.o \
+	${OBJECTDIR}/css.o \
 	${OBJECTDIR}/getheader.o \
 	${OBJECTDIR}/gettag.o \
 	${OBJECTDIR}/gettag_v2.o \
@@ -87,6 +88,11 @@ ${OBJECTDIR}/classes.o: classes.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/classes.o classes.cpp
+
+${OBJECTDIR}/css.o: css.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -Wall -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/css.o css.cpp
 
 ${OBJECTDIR}/getheader.o: getheader.cpp 
 	${MKDIR} -p ${OBJECTDIR}

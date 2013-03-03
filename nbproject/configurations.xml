@@ -7,6 +7,7 @@
       <itemPath>MP3Infos.hpp</itemPath>
       <itemPath>classes.h</itemPath>
       <itemPath>cpplinq.hpp</itemPath>
+      <itemPath>css.h</itemPath>
       <itemPath>getheader.h</itemPath>
       <itemPath>gettag.h</itemPath>
       <itemPath>gettag_v2.h</itemPath>
@@ -29,6 +30,7 @@
       <itemPath>MP3Infos.cpp</itemPath>
       <itemPath>README.md</itemPath>
       <itemPath>classes.cpp</itemPath>
+      <itemPath>css.cpp</itemPath>
       <itemPath>getheader.cpp</itemPath>
       <itemPath>gettag.cpp</itemPath>
       <itemPath>gettag_v2.cpp</itemPath>
@@ -88,6 +90,10 @@
       <item path="classes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cpplinq.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="css.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="css.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="getheader.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -160,6 +166,10 @@
       <item path="classes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="cpplinq.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="css.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="css.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="getheader.cpp" ex="false" tool="1" flavor2="0">
       </item>

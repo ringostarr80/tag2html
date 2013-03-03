@@ -1,24 +1,3 @@
-/***************************************************************************
-                          main.cpp  -  description
-                             -------------------
-    program              : tag2html
-    version              : 0.2.0
-    begin                : Mon Mär  3 22:34:16 CET 2003
-    copyright            : (C) 2003 by ringostarr / sfo
-    email                : ringostarr <ringo19@gmx.de>
-                           sfo <sfo@zapo.net>
-    resource             : http://tag2html.sourceforge.net
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- ***************************************************************************/
-
 #include <vector>
 #include <sstream>
 #include <stdlib.h>
@@ -33,6 +12,7 @@
 #include "MP3Collection.hpp"
 #include "MP3Infos.hpp"
 #include "xml.h"
+#include "css.h"
 
 using namespace std;
 
@@ -680,43 +660,4 @@ void writeXslFile()
 	XMLPlatformUtils::Terminate();
 
 	writeCssFile();
-}
-
-void writeCssFile()
-{
-	ofstream cssFile("index.css");
-
-	cssFile << "body {\n";
-	cssFile << "\tfont-family: sans-serif;\n";
-	cssFile << "\tfont-size:  12px;\n";
-	cssFile << "\tbackground-color: #ABABAB;\n";
-	cssFile << "\tcolor: #303030;\n";
-	cssFile << "}\n";
-	cssFile << "h1 {\n";
-	cssFile << "\tfont-size: 16px;\n";
-	cssFile << "\ttext-align: center;\n";
-	cssFile << "}\n";
-	cssFile << "table {\n";
-	cssFile << "\tbackground-color: #FFFFFF;\n";
-	cssFile << "\tborder: \"thin solid black\";\n";
-	cssFile << "\twidth: 960px;\n";
-	cssFile << "}\n";
-	cssFile << "table.nb {\n";
-	cssFile << "\tbackground-color: #FFFFFF;\n";
-	cssFile << "\tborder: thin solid white;\n";
-	cssFile << "}\n";
-	cssFile << "td, th {\n";
-	cssFile << "\tpadding: 2px 5px 2px 5px;\n";
-	cssFile << "}\n";
-	cssFile << "tbody > tr:nth-child(odd) {\n";
-	cssFile << "\tbackground-color: white;\n";
-	cssFile << "}\n";
-	cssFile << "tbody > tr:nth-child(even) {\n";
-	cssFile << "\tbackground-color: #EEEEEE;\n";
-	cssFile << "}\n";
-	cssFile << "a {\n";
-	cssFile << "\tcolor: #444444;\n";
-	cssFile << "}\n";
-
-	cssFile.close();
 }

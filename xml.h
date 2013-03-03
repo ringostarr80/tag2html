@@ -42,6 +42,5 @@ XERCES_CPP_NAMESPACE_USE
 void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool outputXSD);
 void writeXsdFile();
 void writeXslFile();
-void writeCssFile();
 
 #endif /* XML_H */

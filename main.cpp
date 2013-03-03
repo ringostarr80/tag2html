@@ -210,12 +210,11 @@ int main(int argc, char **argv)
 	}
 
 	if (arguments.html) {
+		writeHtmlFile(mp3Collection);
+
+		/*
 		if (arguments.verbose) {
 			cout << "creating file " << dir << "/index.css" << endl;
-		}
-		if (html_css(myhtml) == -1) {
-			cerr << "error: can't open css-file!" << endl;
-			exit(-1);
 		}
 		if (arguments.verbose) {
 			cout << "creating file " << dir << "/index.html" << endl;
@@ -234,6 +233,7 @@ int main(int argc, char **argv)
 			cerr << "error: can't open info-file!" << endl;
 			exit(-1);
 		}
+		*/
 	}
 
 	if (arguments.xml) {
@@ -246,6 +246,7 @@ int main(int argc, char **argv)
 
 	for (int i = 0; i <= mysort->cur_index; i++) {
 		if (arguments.html) {
+			/*
 			if (html_content(&mysort->s_tag[i], myhtml) == -1) {
 				cerr << "error: can't open html-file!" << endl;
 				exit(-1);
@@ -255,10 +256,12 @@ int main(int argc, char **argv)
 				cerr << "error: can't open html-file!" << endl;
 				exit(-1);
 			}
+			*/
 		}
 	}
 
 	if (arguments.html) {
+		/*
 		if (html_foot(myhtml) == -1) {
 			cerr << "error: can't open html-file!" << endl;
 			exit(-1);
@@ -282,6 +285,7 @@ int main(int argc, char **argv)
 			cerr << "error: can't open info-file!" << endl;
 			exit(-1);
 		}
+		*/
 	}
 
 	delete mytag;
