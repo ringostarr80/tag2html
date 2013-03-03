@@ -27,6 +27,7 @@
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml --xsd</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" --html</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" --xml --xsd --xsl</runcommandpicklistitem>
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}" --xml --xsd --xsl</runcommand>

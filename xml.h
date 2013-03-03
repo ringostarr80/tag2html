@@ -43,10 +43,5 @@ void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool o
 void writeXsdFile();
 void writeXslFile();
 void writeCssFile();
-int xsd_schema(char *filename);
-int xsl_stylesheet(char *filename);
-int xml_head(char *filename);
-int xml_content(tags *tagger, header *mp3header, char *filename);
-int xml_foot(char *filename);
 
 #endif /* XML_H */

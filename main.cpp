@@ -174,11 +174,6 @@ int main(int argc, char **argv)
 	mp3_sort *mysort = new mp3_sort;
 	stats *mystat = new stats;
 
-	char xml_file[12], xsd_file[12], xsl_file[12];
-	strncpy(xml_file, "./index.xml", sizeof(xml_file));
-	strncpy(xsd_file, "./index.xsd", sizeof(xsd_file));
-	strncpy(xsl_file, "./index.xsl", sizeof(xsl_file));
-
 	// structs
 	DIR *mydir;
 	struct dirent *directoryEntry;
