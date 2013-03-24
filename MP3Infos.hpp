@@ -29,6 +29,7 @@ namespace Tag2Html {
 		string genre;
 		string comment;
 		string filename;
+		long filesize;
 		int bitrate;
 		int samplerate;
 		bool isCopyrighted;

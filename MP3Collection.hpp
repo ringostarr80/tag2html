@@ -27,6 +27,10 @@ namespace Tag2Html {
 
 		void add(TagLib::FileRef* fileRef);
 		list<MP3Infos*> getSortedList();
+		int getArtistCount();
+		int getAlbumCount();
+		long getTotalFilesize();
+		int getTotalLength();
 	private:
 	};
 }

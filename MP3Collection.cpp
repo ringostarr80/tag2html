@@ -38,6 +38,7 @@ namespace Tag2Html {
 		mp3Info->genre = fileRef->tag()->genre().to8Bit(true);
 		mp3Info->comment = fileRef->tag()->comment().to8Bit(true);
 		mp3Info->filename = fileRef->file()->name();
+		mp3Info->filesize = fileRef->file()->length();
 		mp3Info->bitrate = fileRef->audioProperties()->bitrate();
 		mp3Info->samplerate = fileRef->audioProperties()->sampleRate();
 
@@ -57,6 +58,38 @@ namespace Tag2Html {
 		auto result = from_iterators(this->items.begin(), this->items.end()) >> orderby_ascending([](MP3Infos* const &infos) {
 			return infos->track;
 		}) >> to_list();
+		return result;
+	}
+
+	int MP3Collection::getArtistCount() {
+		auto result = from_iterators(this->items.begin(), this->items.end()) >> select([](MP3Infos* const &infos) {
+			return infos->artist;
+		}) >> distinct() >> count();
+
+		return result;
+	}
+
+	int MP3Collection::getAlbumCount() {
+		auto result = from_iterators(this->items.begin(), this->items.end()) >> select([](MP3Infos* const &infos) {
+			return infos->album;
+		}) >> distinct() >> count();
+
+		return result;
+	}
+
+	long MP3Collection::getTotalFilesize() {
+		auto result = from_iterators(this->items.begin(), this->items.end()) >> select([](MP3Infos* const &infos) {
+			return infos->filesize;
+		}) >> sum();
+
+		return result;
+	}
+
+	int MP3Collection::getTotalLength() {
+		auto result = from_iterators(this->items.begin(), this->items.end()) >> select([](MP3Infos* const &infos) {
+			return infos->length;
+		}) >> sum();
+
 		return result;
 	}
 }

@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>MP3Collection.hpp</itemPath>
       <itemPath>MP3Infos.hpp</itemPath>
       <itemPath>classes.h</itemPath>
       <itemPath>cpplinq.hpp</itemPath>
@@ -26,7 +27,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <itemPath>MP3Collection.cpp</itemPath>
-      <itemPath>MP3Collection.hpp</itemPath>
       <itemPath>MP3Infos.cpp</itemPath>
       <itemPath>README.md</itemPath>
       <itemPath>classes.cpp</itemPath>

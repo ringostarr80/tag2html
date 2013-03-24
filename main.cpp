@@ -3,11 +3,10 @@
                              -------------------
     program              : tag2html
     version              : 0.2.0
-    begin                : Mon Mär  3 22:34:16 CET 2003
-    copyright            : (C) 2003 by ringostarr / sfo
-    email                : ringostarr <ringo19@gmx.de>
-                           sfo <sfo@zapo.net>
-    resource             : http://tag2html.sourceforge.net
+    begin                : Mon Mär 1 00:00:00 CET 2013
+    copyright            : (C) 2013 by ringostarr80
+    email                : ringostarr80 <ringo19@gmx.de>
+    resource             : https://github.com/ringostarr80/tag2html
  ***************************************************************************/
 
 /***************************************************************************
