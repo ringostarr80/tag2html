@@ -210,29 +210,6 @@ int main(int argc, char **argv)
 
 	if (arguments.html) {
 		writeHtmlFile(mp3Collection);
-
-		/*
-		if (arguments.verbose) {
-			cout << "creating file " << dir << "/index.css" << endl;
-		}
-		if (arguments.verbose) {
-			cout << "creating file " << dir << "/index.html" << endl;
-		}
-		if (html_head(myhtml, mytag) == -1) {
-			cerr << "error: can't open html-file!" << endl;
-			exit(-1);
-		}
-
-		if (stat_head(myhtml) == -1) {
-			cerr << "error: can't open stat-file!" << endl;
-			exit(-1);
-		}
-
-		if (info_head(myhtml->infofilename) == -1) {
-			cerr << "error: can't open info-file!" << endl;
-			exit(-1);
-		}
-		*/
 	}
 
 	if (arguments.xml) {
@@ -242,50 +219,6 @@ int main(int argc, char **argv)
 	get_mp3time(statheader->Length, statheader);
 	strncpy(mystat->tot_length, statheader->Length_String, sizeof(mystat->tot_length));
 	mysort->sort_tag();
-
-	for (int i = 0; i <= mysort->cur_index; i++) {
-		if (arguments.html) {
-			/*
-			if (html_content(&mysort->s_tag[i], myhtml) == -1) {
-				cerr << "error: can't open html-file!" << endl;
-				exit(-1);
-			}
-
-			if (info_body(myhtml->infofilename, myheader, &mysort->s_tag[i]) == -1) {
-				cerr << "error: can't open html-file!" << endl;
-				exit(-1);
-			}
-			*/
-		}
-	}
-
-	if (arguments.html) {
-		/*
-		if (html_foot(myhtml) == -1) {
-			cerr << "error: can't open html-file!" << endl;
-			exit(-1);
-		}
-
-		if (!arguments.silent) {
-			cout << "data successfully written to " << dir << "/index.html" << endl;
-		}
-
-		if (stat_content(mystat, myhtml) == -1) {
-			cerr << "error: can't open stat-file!" << endl;
-			exit(-1);
-		}
-
-		if (stat_foot(myhtml) == -1) {
-			cerr << "error: can't open stat-file!" << endl;
-			exit(-1);
-		}
-
-		if (info_foot(myhtml->infofilename) == -1) {
-			cerr << "error: can't open info-file!" << endl;
-			exit(-1);
-		}
-		*/
-	}
 
 	delete mytag;
 	delete myhtml;

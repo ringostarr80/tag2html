@@ -205,6 +205,7 @@ void writeHtmlFile(Tag2Html::MP3Collection* mp3Collection)
 
 	writeCssFile();
 	writeStatFile(mp3Collection);
+	writeInfoFile(mp3Collection);
 }
 
 void writeStatFile(Tag2Html::MP3Collection* mp3Collection)
@@ -416,6 +417,247 @@ void writeStatFile(Tag2Html::MP3Collection* mp3Collection)
 		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
 	}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("stats.html");
+	writer->writeNode(fileFormatTarget, *doc);
+	fileFormatTarget->flush();
+	writer->release();
+
+	doc->release();
+	XMLPlatformUtils::Terminate();
+}
+
+void writeInfoFile(Tag2Html::MP3Collection* mp3Collection)
+{
+	ostringstream convert;
+
+	XMLPlatformUtils::Initialize();
+	DOMImplementation* domImplementation = DOMImplementationRegistry::getDOMImplementation(XMLString::transcode("core"));
+	// <html>
+	DOMDocument* doc = domImplementation->createDocument(0, XMLString::transcode("html"), 0);
+
+	DOMDocumentType* docType = domImplementation->createDocumentType(XMLString::transcode("html"), XMLString::transcode(""), XMLString::transcode(""));
+	doc->insertBefore(docType, doc->getDocumentElement());
+
+	//	<head>
+	DOMElement* head = doc->createElement(XMLString::transcode("head"));
+
+	//		<link rel="stylesheet" type="text/css" href="./index.css">
+	DOMElement* headLink = doc->createElement(XMLString::transcode("link"));
+	headLink->setAttribute(XMLString::transcode("rel"), XMLString::transcode("stylesheet"));
+	headLink->setAttribute(XMLString::transcode("type"), XMLString::transcode("text/css"));
+	headLink->setAttribute(XMLString::transcode("href"), XMLString::transcode("index.css"));
+	head->appendChild(headLink);
+
+	//		<title>tag2html info page</title>
+	DOMElement* headTitle = doc->createElement(XMLString::transcode("title"));
+	headTitle->setTextContent(XMLString::transcode("tag2html info page"));
+	head->appendChild(headTitle);
+
+	//		<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+	DOMElement* headMeta = doc->createElement(XMLString::transcode("meta"));
+	headMeta->setAttribute(XMLString::transcode("http-equiv"), XMLString::transcode("Content-Type"));
+	headMeta->setAttribute(XMLString::transcode("content"), XMLString::transcode("text/html"));
+	headMeta->setAttribute(XMLString::transcode("charset"), XMLString::transcode("utf-8"));
+	head->appendChild(headMeta);
+
+	//	<body>
+	DOMElement* body = doc->createElement(XMLString::transcode("body"));
+
+	//		<h1>File Info</h1>
+	DOMElement* h1 = doc->createElement(XMLString::transcode("h1"));
+	h1->setTextContent(XMLString::transcode("File Info"));
+	body->appendChild(h1);
+
+	//		<table align="center">
+	DOMElement* table = doc->createElement(XMLString::transcode("table"));
+	table->setAttribute(XMLString::transcode("align"), XMLString::transcode("center"));
+
+	//			<thead>
+	DOMElement* tHead = doc->createElement(XMLString::transcode("thead"));
+
+	//				<tr bgcolor="#CCCCCC">
+	DOMElement* tHeadRow = doc->createElement(XMLString::transcode("tr"));
+	tHeadRow->setAttribute(XMLString::transcode("bgcolor"), XMLString::transcode("#CCCCCC"));
+
+	//					<th style="width: 100px; font-weight: bold;">Filename</th>
+	DOMElement* tHeadColumn1 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn1->setTextContent(XMLString::transcode("Filename"));
+	tHeadRow->appendChild(tHeadColumn1);
+
+	//					<th style="width: 50px; font-weight: bold;">Bitrate</th>
+	DOMElement* tHeadColumn2 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn2->setTextContent(XMLString::transcode("Bitrate"));
+	tHeadRow->appendChild(tHeadColumn2);
+
+	//					<th style="width: 100px; font-weight: bold;">MPEG Audio Version</th>
+	DOMElement* tHeadColumn3 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn3->setTextContent(XMLString::transcode("MPEG Audio Version"));
+	tHeadRow->appendChild(tHeadColumn3);
+
+	//					<th style="width: 100px; font-weight: bold;">Layer</th>
+	DOMElement* tHeadColumn4 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn4->setTextContent(XMLString::transcode("Layer"));
+	tHeadRow->appendChild(tHeadColumn4);
+
+	//					<th style="width: 100px; font-weight: bold;">Error Protection</th>
+	DOMElement* tHeadColumn5 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn5->setTextContent(XMLString::transcode("Error Protection"));
+	tHeadRow->appendChild(tHeadColumn5);
+
+	//					<th style="width: 100px; font-weight: bold;">Sampling Rate</th>
+	DOMElement* tHeadColumn6 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn6->setTextContent(XMLString::transcode("Sampling Rate"));
+	tHeadRow->appendChild(tHeadColumn6);
+
+	//					<th style="width: 50px; font-weight: bold;">Private</th>
+	DOMElement* tHeadColumn7 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn7->setTextContent(XMLString::transcode("Private"));
+	tHeadRow->appendChild(tHeadColumn7);
+
+	//					<th style="width: 100px; font-weight: bold;">Channel Mode</th>
+	DOMElement* tHeadColumn8 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn8->setTextContent(XMLString::transcode("Channel Mode"));
+	tHeadRow->appendChild(tHeadColumn8);
+
+	//					<th style="width: 100px; font-weight: bold;">Copyright</th>
+	DOMElement* tHeadColumn9 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn9->setTextContent(XMLString::transcode("Copyright"));
+	tHeadRow->appendChild(tHeadColumn9);
+
+	//					<th style="width: 50px; font-weight: bold;">Original</th>
+	DOMElement* tHeadColumn10 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn10->setTextContent(XMLString::transcode("Original"));
+	tHeadRow->appendChild(tHeadColumn10);
+
+	//					<th style="width: 100px; font-weight: bold;">Emphasis</th>
+	DOMElement* tHeadColumn11 = doc->createElement(XMLString::transcode("th"));
+	tHeadColumn11->setTextContent(XMLString::transcode("Emphasis"));
+	tHeadRow->appendChild(tHeadColumn11);
+
+	tHead->appendChild(tHeadRow);
+	table->appendChild(tHead);
+
+	//			<tbody>
+	DOMElement* tBody = doc->createElement(XMLString::transcode("tbody"));
+
+	list<Tag2Html::MP3Infos*> sortedList = mp3Collection->getSortedList();
+	for (list<Tag2Html::MP3Infos*>::iterator mp3info = sortedList.begin(); mp3info != sortedList.end(); mp3info++) {
+		//				<tr>
+		DOMElement* currentRow = doc->createElement(XMLString::transcode("tr"));
+
+		//					<td>" << mytag->filename << "</td>
+		DOMElement* columnFilename = doc->createElement(XMLString::transcode("td"));
+		columnFilename->setTextContent(XMLString::transcode((*mp3info)->filename.c_str()));
+		currentRow->appendChild(columnFilename);
+
+		//					<td>" << myheader->Bitrate << "</td>
+		DOMElement* columnBitrate = doc->createElement(XMLString::transcode("td"));
+		convert.str("");
+		convert << (*mp3info)->bitrate << " kbit/s";
+		columnBitrate->setTextContent(XMLString::transcode(convert.str().c_str()));
+		currentRow->appendChild(columnBitrate);
+
+		//					<td>" << myheader->MPEG_Audio_Version << "</td>
+		DOMElement* columnMPEGAudioVersion = doc->createElement(XMLString::transcode("td"));
+		switch((*mp3info)->version) {
+			case TagLib::MPEG::Header::Version::Version1:
+				columnMPEGAudioVersion->setTextContent(XMLString::transcode("1"));
+				break;
+			case TagLib::MPEG::Header::Version::Version2:
+				columnMPEGAudioVersion->setTextContent(XMLString::transcode("2"));
+				break;
+			case TagLib::MPEG::Header::Version::Version2_5:
+				columnMPEGAudioVersion->setTextContent(XMLString::transcode("2.5"));
+				break;
+		}
+		currentRow->appendChild(columnMPEGAudioVersion);
+
+		//					<td>" << myheader->Layer << "</td>
+		DOMElement* columnLayer = doc->createElement(XMLString::transcode("td"));
+		convert.str("");
+		convert << (*mp3info)->layer;
+		columnLayer->setTextContent(XMLString::transcode(convert.str().c_str()));
+		currentRow->appendChild(columnLayer);
+
+		//					<td>" << myheader->Error_Protection << "</td>
+		DOMElement* columnErrorProtection = doc->createElement(XMLString::transcode("td"));
+		if ((*mp3info)->protectionEnabled) {
+			columnErrorProtection->setTextContent(XMLString::transcode("yes"));
+		} else {
+			columnErrorProtection->setTextContent(XMLString::transcode("no"));
+		}
+		currentRow->appendChild(columnErrorProtection);
+
+		//					<td>" << myheader->Samplerate << "</td>
+		DOMElement* columnSamplerate = doc->createElement(XMLString::transcode("td"));
+		convert.str("");
+		convert << (*mp3info)->samplerate << " Hz";
+		columnSamplerate->setTextContent(XMLString::transcode(convert.str().c_str()));
+		currentRow->appendChild(columnSamplerate);
+
+		//					<td>" << myheader->Private << "</td>
+		DOMElement* columnPrivate = doc->createElement(XMLString::transcode("td"));
+		columnPrivate->setTextContent(XMLString::transcode(""));
+		currentRow->appendChild(columnPrivate);
+
+		//					<td>" << myheader->Channel_Mode << "</td>
+		DOMElement* columnChannelMode = doc->createElement(XMLString::transcode("td"));
+		switch((*mp3info)->channelMode) {
+			case TagLib::MPEG::Header::ChannelMode::DualChannel:
+				columnChannelMode->setTextContent(XMLString::transcode("Dual Channel"));
+				break;
+			case TagLib::MPEG::Header::ChannelMode::JointStereo:
+				columnChannelMode->setTextContent(XMLString::transcode("Joint Stereo"));
+				break;
+			case TagLib::MPEG::Header::ChannelMode::SingleChannel:
+				columnChannelMode->setTextContent(XMLString::transcode("Single Channel"));
+				break;
+			case TagLib::MPEG::Header::ChannelMode::Stereo:
+				columnChannelMode->setTextContent(XMLString::transcode("Stereo"));
+				break;
+		}
+		currentRow->appendChild(columnChannelMode);
+
+		//					<td>" << myheader->Copyright << "</td>
+		DOMElement* columnCopyright = doc->createElement(XMLString::transcode("td"));
+		if ((*mp3info)->isCopyrighted) {
+			columnCopyright->setTextContent(XMLString::transcode("yes"));
+		} else {
+			columnCopyright->setTextContent(XMLString::transcode("no"));
+		}
+		currentRow->appendChild(columnCopyright);
+
+		//					<td>" << myheader->Original << "</td>
+		DOMElement* columnOriginal = doc->createElement(XMLString::transcode("td"));
+		if ((*mp3info)->isOriginal) {
+			columnOriginal->setTextContent(XMLString::transcode("yes"));
+		} else {
+			columnOriginal->setTextContent(XMLString::transcode("no"));
+		}
+		currentRow->appendChild(columnOriginal);
+
+		//					<td>" << myheader->Emphasis << "</td>
+		DOMElement* columnEmphasis = doc->createElement(XMLString::transcode("td"));
+		columnEmphasis->setTextContent(XMLString::transcode(""));
+		currentRow->appendChild(columnEmphasis);
+
+		tBody->appendChild(currentRow);
+	}
+
+	table->appendChild(tBody);
+
+	body->appendChild(table);
+
+	doc->getDocumentElement()->appendChild(head);
+	doc->getDocumentElement()->appendChild(body);
+
+	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
+	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	}
+	if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
+		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
+	}
+	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("info.html");
 	writer->writeNode(fileFormatTarget, *doc);
 	fileFormatTarget->flush();
 	writer->release();

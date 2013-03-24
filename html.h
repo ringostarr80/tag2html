@@ -22,5 +22,6 @@ XERCES_CPP_NAMESPACE_USE
 
 void writeHtmlFile(Tag2Html::MP3Collection* mp3Collection);
 void writeStatFile(Tag2Html::MP3Collection* mp3Collection);
+void writeInfoFile(Tag2Html::MP3Collection* mp3Collection);
 
 #endif
