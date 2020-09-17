@@ -64,7 +64,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-ltag -ltag_c -lxerces-c -lz
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -72,72 +72,72 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html ${OBJECTFILES} ${LDLIBSOPTIONS}
+	${LINK.cc} -std=c++17 -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/tag2html ${OBJECTFILES} ${LDLIBSOPTIONS}
 
 ${OBJECTDIR}/MP3Collection.o: MP3Collection.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Collection.o MP3Collection.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Collection.o MP3Collection.cpp
 
 ${OBJECTDIR}/MP3Infos.o: MP3Infos.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Infos.o MP3Infos.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MP3Infos.o MP3Infos.cpp
 
 ${OBJECTDIR}/classes.o: classes.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/classes.o classes.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/classes.o classes.cpp
 
 ${OBJECTDIR}/css.o: css.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/css.o css.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/css.o css.cpp
 
 ${OBJECTDIR}/getheader.o: getheader.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/getheader.o getheader.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/getheader.o getheader.cpp
 
 ${OBJECTDIR}/gettag.o: gettag.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag.o gettag.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag.o gettag.cpp
 
 ${OBJECTDIR}/gettag_v2.o: gettag_v2.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag_v2.o gettag_v2.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/gettag_v2.o gettag_v2.cpp
 
 ${OBJECTDIR}/html.o: html.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/html.o html.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/html.o html.cpp
 
 ${OBJECTDIR}/info.o: info.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/info.o info.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/info.o info.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.cpp
 
 ${OBJECTDIR}/sort.o: sort.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/sort.o sort.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/sort.o sort.cpp
 
 ${OBJECTDIR}/stat.o: stat.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/stat.o stat.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/stat.o stat.cpp
 
 ${OBJECTDIR}/xml.o: xml.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/xml.o xml.cpp
+	$(COMPILE.cc) -O2 -std=c++17 -MMD -MP -MF $@.d -o ${OBJECTDIR}/xml.o xml.cpp
 
 # Subprojects
 .build-subprojects:

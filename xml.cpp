@@ -149,12 +149,14 @@ void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool o
 		doc->getDocumentElement()->appendChild(track);
 	}
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("index.xml");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 
@@ -434,12 +436,14 @@ void writeXsdFile()
 
 	doc->getDocumentElement()->appendChild(xsdElementTagInfo);
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("index.xsd");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 
@@ -647,12 +651,14 @@ void writeXslFile()
 
 	doc->getDocumentElement()->appendChild(xslTemplate);
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("index.xsl");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 

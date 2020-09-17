@@ -26,7 +26,7 @@
 #include <fstream>
 
 #include <xercesc/dom/DOM.hpp>
-#include <xercesc/dom/DOMWriter.hpp>
+#include <xercesc/dom/DOMLSSerializer.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/framework/StdOutFormatTarget.hpp>

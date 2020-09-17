@@ -188,15 +188,18 @@ void writeHtmlFile(Tag2Html::MP3Collection* mp3Collection)
 	doc->getDocumentElement()->appendChild(head);
 	doc->getDocumentElement()->appendChild(body);
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
-	if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
-		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
+	//if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
+	//	writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("index.html");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	//writer->writeNode(fileFormatTarget, *doc);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 
@@ -409,15 +412,18 @@ void writeStatFile(Tag2Html::MP3Collection* mp3Collection)
 	doc->getDocumentElement()->appendChild(head);
 	doc->getDocumentElement()->appendChild(body);
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
-	if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
-		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
+	//if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
+	//	writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("stats.html");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	//writer->writeNode(fileFormatTarget, *doc);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 
@@ -650,15 +656,18 @@ void writeInfoFile(Tag2Html::MP3Collection* mp3Collection)
 	doc->getDocumentElement()->appendChild(head);
 	doc->getDocumentElement()->appendChild(body);
 
-	DOMWriter* writer = ((DOMImplementationLS*)domImplementation)->createDOMWriter();
-	if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
-		writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	}
-	if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
-		writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
-	}
+	DOMLSSerializer* writer = ((DOMImplementationLS*)domImplementation)->createLSSerializer();
+	//if (writer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+	//	writer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	//}
+	//if (writer->canSetFeature(XMLUni::fgDOMXMLDeclaration, false)) {
+	//	writer->setFeature(XMLUni::fgDOMXMLDeclaration, false);
+	//}
 	XMLFormatTarget *fileFormatTarget = new LocalFileFormatTarget("info.html");
-	writer->writeNode(fileFormatTarget, *doc);
+	DOMLSOutput* theOutput = ((DOMImplementationLS*)domImplementation)->createLSOutput();
+    theOutput->setByteStream(fileFormatTarget);
+	//writer->writeNode(fileFormatTarget, *doc);
+	writer->write(doc, theOutput);
 	fileFormatTarget->flush();
 	writer->release();
 
