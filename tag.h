@@ -55,7 +55,7 @@ class header
 		char Emphasis[255];
 		int Dateigroesze;
 		unsigned int Length; // in Sekunden
-		char Length_String[20], buffer_stunden[9], buffer_minuten[9], buffer_sekunden[2];
+		char Length_String[21], buffer_stunden[9], buffer_minuten[9], buffer_sekunden[2];
 };
 
 int get_filesize(char *buffer);
