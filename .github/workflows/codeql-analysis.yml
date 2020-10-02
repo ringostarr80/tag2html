@@ -64,6 +64,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
+       apt install libtag1-dev libtag1v5 libtagc0-dev libtagc0 libxerces-c-dev libid3-3.8.3-dev
        make
 
     - name: Perform CodeQL Analysis
