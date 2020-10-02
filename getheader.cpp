@@ -311,7 +311,7 @@ int get_mp3time(unsigned int time, header *mp3header)
 	if (stunden == 0) {
 		strcpy(mp3header->Length_String, mp3header->buffer_minuten);
 	} else {
-		strcat(mp3header->Length_String, mp3header->buffer_minuten);
+		strcat((char*)mp3header->Length_String, (char*)mp3header->buffer_minuten);
 	}
 	strcat(mp3header->Length_String, ":");
 
