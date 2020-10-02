@@ -1,3 +1,6 @@
 /dist/
 /build/
+tag2html
 .dep.inc
+*.o
+*.o.d

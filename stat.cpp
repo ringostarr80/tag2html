@@ -55,7 +55,7 @@ void get_artistcount( char *artist, stats *mystat )
 {
 	bool isnew = true;
 	if (mystat->art_count == 0) {
-		strncpy(mystat->artist[mystat->art_count], artist, sizeof(mystat->artist[mystat->art_count]));
+		strncpy(mystat->artist[mystat->art_count], artist, sizeof(mystat->artist[mystat->art_count]) - 1);
 	}
 
 	for (int i = 0; i < mystat->art_count; i++) {
