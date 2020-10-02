@@ -114,8 +114,6 @@ static error_t parse_opt(int key, char *arg, struct argp_state *state)
 			if (state->arg_num >= 1) { // too many arguments
 				argp_usage(state);
 			}
-
-			arguments->args[state->arg_num] = arg;
 			break;
 
 		case ARGP_KEY_END:
@@ -174,12 +172,9 @@ int main(int argc, char **argv)
 	stats *mystat = new stats;
 
 	// structs
-	DIR *mydir;
 	struct dirent *directoryEntry;
 
 	Tag2Html::MP3Collection* mp3Collection = new Tag2Html::MP3Collection();
-
-	char dir[1024];
 
 	mytag->layout_flag = 1;
 	mytag->trackno = 0;
@@ -189,7 +184,14 @@ int main(int argc, char **argv)
 	strncpy(myhtml->statfilename, "./stats.html", sizeof(myhtml->statfilename));
 	strncpy(myhtml->infofilename, "./info.html", sizeof(myhtml->infofilename));
 
-	if ((mydir=opendir(getcwd(dir, 1024)))==NULL) {
+	char dir[1024];
+	const char* cwd = getcwd(dir, 1024);
+	if (cwd == nullptr) {
+		cerr << "error: invalid current directory!" << endl;
+		exit(-1);
+	}
+	DIR* cwd_dir = opendir(cwd);
+	if (cwd_dir == nullptr) {
 		cerr << "error: can't open current directory to read contents!" << endl;
 		exit(-1);
 	}
@@ -197,7 +199,7 @@ int main(int argc, char **argv)
 	if (!arguments.silent) {
 		cout << "searching for mp3-files in  " << dir << "/" << endl;
 	}
-	while ((directoryEntry = readdir(mydir)) != NULL) {
+	while ((directoryEntry = readdir(cwd_dir)) != NULL) {
 		if (strstr(directoryEntry->d_name, ".mp3") != NULL) {
 			TagLib::FileRef* f = new TagLib::FileRef(directoryEntry->d_name);
 			if (f->tag()->isEmpty()) {

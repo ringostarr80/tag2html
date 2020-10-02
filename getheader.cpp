@@ -172,7 +172,7 @@ int get_mp3header(char *filename_ptr, header *mp3header)
 	}
 
 	// Sampling Frequency
-	unsigned short teiler;
+	ushort teiler = 1;
 	mp3header->sampling_rate_frequency = Header_Bytes[2];
 	mp3header->sampling_rate_frequency>>= 2;
 	mp3header->sampling_rate_frequency&= 0x03;

@@ -107,7 +107,7 @@ void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool o
 		convert.str("");
 		convert << (*mp3info)->channels;
 		channels->setTextContent(XMLString::transcode(convert.str().c_str()));
-		const char* channelMode;
+		const char* channelMode = "SingleChannel";
 		switch ((*mp3info)->channelMode) {
 			case TagLib::MPEG::Header::ChannelMode::DualChannel:
 				channelMode = "DualChannel";
@@ -129,7 +129,7 @@ void writeXmlFile(Tag2Html::MP3Collection* mp3Collection, bool outputXSL, bool o
 		convert.str("");
 		convert << (*mp3info)->layer;
 		mpegAudioVersion->setAttribute(XMLString::transcode("layer"), XMLString::transcode(convert.str().c_str()));
-		const char* version;
+		const char* version = "1";
 		switch ((*mp3info)->version) {
 			case TagLib::MPEG::Header::Version::Version1:
 				version = "1";
